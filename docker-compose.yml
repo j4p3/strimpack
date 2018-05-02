@@ -1,0 +1,82 @@
+version: '2'
+services:
+  postgresql:
+    image: 'bitnami/postgresql:9.6'
+    volumes:
+      - 'postgresql_data:/bitnami'
+    environment:
+      - POSTGRESQL_PASSWORD
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - REDIS_PASSWORD
+    volumes:
+      - 'redis_data:/bitnami'
+  discourse:
+    image: 'bitnami/discourse:latest'
+    ports:
+      - '80:3000'
+    depends_on:
+      - postgresql
+      - redis
+    volumes:
+      - 'discourse_data:/bitnami'
+    environment:
+      - POSTGRESQL_HOST
+      - POSTGRESQL_ROOT_USER
+      - POSTGRESQL_ROOT_PASSWORD
+      - POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
+      - POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
+      - POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+      - DISCOURSE_POSTGRESQL_NAME
+      - DISCOURSE_POSTGRESQL_USERNAME
+      - DISCOURSE_POSTGRESQL_PASSWORD
+      - REDIS_PASSWORD
+  sidekiq:
+    image: 'bitnami/discourse:latest'
+    depends_on:
+      - discourse
+    volumes:
+      - 'sidekiq_data:/bitnami'
+    command: 'nami start --foreground discourse-sidekiq'
+    environment:
+      - DISCOURSE_POSTGRESQL_NAME
+      - DISCOURSE_POSTGRESQL_USERNAME
+      - DISCOURSE_POSTGRESQL_PASSWORD
+      - DISCOURSE_HOST=discourse
+      - DISCOURSE_PORT=3000
+      - REDIS_PASSWORD
+  web_client:
+    image: strimpack-web-client:master
+    volumes:
+      - 'client_assets:/usr/src/strimpack-web-client/'
+  site:
+    image: strimpack:master
+    depends_on:
+      - 'postgresql'
+      - 'web_client'
+    volumes:
+      - 'client_assets:/usr/src/strimpack-web-client/'
+    ports:
+      - '8080:8080'
+    env_file:
+      - '.env.docker'
+  chat:
+    image: strimchat:master
+    depends_on:
+      - 'postgresql'
+    ports:
+      - '8082:8082'
+    env_file:
+      - '.env.docker'
+volumes:
+  postgresql_data:
+    driver: local
+  redis_data:
+    driver: local
+  discourse_data:
+    driver: local
+  sidekiq_data:
+    driver: local
+  client_assets:
+    driver: local
