@@ -48,11 +48,11 @@ services:
       - DISCOURSE_PORT=3000
       - REDIS_PASSWORD
   web_client:
-    image: strimpack-web-client:master
+    image: j4p3/strimpack-web-client:master
     volumes:
       - 'client_assets:/usr/src/strimpack-web-client/'
   site:
-    image: strimpack:master
+    image: j4p3/strimpack:master
     depends_on:
       - 'postgresql'
       - 'web_client'
@@ -65,7 +65,7 @@ services:
     environment:
       - VIRTUAL_HOST=docker.local
   chat:
-    image: strimchat:master
+    image: j4p3/strimchat:master
     depends_on:
       - 'postgresql'
       - 'site'
