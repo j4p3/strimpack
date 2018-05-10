@@ -14,14 +14,15 @@ services:
       - 'redis_data:/bitnami'
   discourse:
     image: 'bitnami/discourse:latest'
-    ports:
-      - '80:3000'
+    expose:
+      - '3000'
     depends_on:
       - postgresql
       - redis
     volumes:
       - 'discourse_data:/bitnami'
     environment:
+      - VIRTUAL_HOST=forum.*
       - POSTGRESQL_HOST
       - POSTGRESQL_ROOT_USER
       - POSTGRESQL_ROOT_PASSWORD
@@ -57,18 +58,29 @@ services:
       - 'web_client'
     volumes:
       - 'client_assets:/usr/src/strimpack-web-client/'
-    ports:
-      - '8080:8080'
+    expose:
+      - '8080'
     env_file:
       - '.env.docker'
+    environment:
+      - VIRTUAL_HOST=docker.local
   chat:
     image: strimchat:master
     depends_on:
       - 'postgresql'
-    ports:
-      - '8082:8082'
+      - 'site'
+    expose:
+      - '8082'
     env_file:
       - '.env.docker'
+    environment:
+      - VIRTUAL_HOST=chat.*
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - '80:80'
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
 volumes:
   postgresql_data:
     driver: local
