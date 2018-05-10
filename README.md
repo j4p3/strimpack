@@ -1,28 +1,68 @@
-# Strimpack Container
+# Strimpack
 
-*Orchestration for strimpack applications.*
+*A tool for livestreamers to set up their own site, chat, subscription system, and forum.*
 
-Docker Compose file for running strimpack system on one server.
+![how fancy](https://s3.amazonaws.com/bonner.jp/strimpack_large.png)
 
-## usage:
-In a server with `docker` and `docker-compose` installed:
+This is the central orchestration repo for the project. There are several other repositories containing the actual applications that are doing the work:
 
-1. `git clone https://github.com/j4p3/strimpack-container.git`
-2. `cd strimpack-container`
-3. Create an environment file with a configuration matching your application
-4. Modify docker-compose.yml to consume this environment file and set proper virtual host URLs
-5. `docker-compose up`
+* [strimpack](https://github.com/j4p3/strimpack) webserver producing main website, handling authentication, payments, and client application prerendering
+*  [strimchat](https://github.com/j4p3/strimchat) chatserver for client application
+*  [strimpack web client](https://github.com/j4p3/strimpack-web-client) react app for main site
 
+The application also uses other open source tools:
+
+*  [discourse](https://github.com/discourse/discourse) forum application
+*  redis
+*  postgresql
+
+
+## usage
+
+**Can I configure this to match the way I want it to be?**
+
+Sure. So far you can adjust the following items to suit you:
+
+* title
+* primary color
+* logo
+* subscription levels
+* subscription prices
+* stream location
+
+And Discourse, the software powering the forum, has a whole slew of configuration options, too.
+
+**Can I use this if I'm not a programmer?**
+
+Sure. You'll need to be able to follow the steps below:
+
+### setup instructions
+
+1. Get a server. Not a tiny one.
+2. Point a domain name at it. Then point `chat.<your domain>` and `forum.<your domain>` at it, too.
+3. SSH into your server.
+4. Install `docker`, `docker-compose`, and `git`.
+5. `git clone https://github.com/j4p3/strimpack-container.git`
+6. `cd strimpack-container`
+7. Create an environment file to suit your application (default will read from `env.local` - details below)
+8. `docker-compose up -d`
+9. Wait a while. You should be able to visit the stream at `<your domain>` within a minute or two, but the forum will take several minutes to install.
+10. You've got yourself a community website.
+
+### items to note
+
+The application has lots of external dependencies. In particular, you need:
+
+* Email - valid credentials for sending email via SMTP
+* Stripe - a Stripe account with some Subscription products in it
+* Twitch - a Twitch account with an application registered on their developer console.
 
 ### environment variables
 
 ```
-NODE_ENV
-
-VIRTUAL_HOST
-STRIMPACK_HOST
-STRIMCHAT_HOST
-DISCOURSE_HOST
+STREAM_TITLE
+STREAM_CHANNEL
+THEME_COLOR
 
 TWITCH_CLIENT_ID
 TWITCH_CLIENT_SECRET
@@ -31,8 +71,16 @@ TWITCH_CALLBACK_URI
 STRIPE_PUBLISHABLE_KEY
 STRIPE_SECRET_KEY
 
+VIRTUAL_HOST
+STRIMPACK_HOST
+STRIMCHAT_HOST
+FORUM_HOST
+
+NODE_ENV
+
 STRIMPACK_PORT
 STRIMPACK_SESSION_SECRET
+
 STRIMPACK_DB_USER
 STRIMPACK_DB_PASSWORD
 STRIMPACK_DB_NAME
@@ -57,24 +105,19 @@ POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
 DISCOURSE_POSTGRESQL_USERNAME
 DISCOURSE_POSTGRESQL_PASSWORD
 DISCOURSE_POSTGRESQL_NAME
-
 REDIS_PASSWORD
+
+SMTP_HOST
+SMTP_PORT
+SMTP_USER
+SMTP_PASSWORD
 
 DISCOURSE_HOST
 DISCOURSE_PORT
 ```
 
-This will start services for:
+### help
 
-* [strimpack](https://github.com/j4p3/strimpack) webserver producing main website, handling authentication, payments, and client application prerendering
-*  [strimchat](https://github.com/j4p3/strimchat) chatserver for client application
-*  [strimpack web client](https://github.com/j4p3/strimpack-web-client) react app for main site
-*  [discourse](https://github.com/discourse/discourse) forum application
-*  redis
-*  postgresql
+Shoot me a message. This was a bit of a learning project, I'm happy to help you get something up and running. You can find me at [bonner.jp](https://bonner.jp).
 
-Then to complete the installation, some manual steps:
-
-1. expose ports on your server
-2. configure DNS
-3. set up discourse installation
+*MIT license.*
