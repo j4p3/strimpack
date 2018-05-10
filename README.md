@@ -6,16 +6,23 @@ Docker Compose file for running strimpack system on one server.
 
 ## usage:
 In a server with `docker` and `docker-compose` installed:
-```
-git clone git@github.com:j4p3/strimpack-container.git
-cd strimpack-container
-docker-compose up
-```
+
+1. `git clone https://github.com/j4p3/strimpack-container.git`
+2. `cd strimpack-container`
+3. Create an environment file with a configuration matching your application
+4. Modify docker-compose.yml to consume this environment file and set proper virtual host URLs
+5. `docker-compose up`
+
 
 ### environment variables
 
 ```
 NODE_ENV
+
+VIRTUAL_HOST
+STRIMPACK_HOST
+STRIMCHAT_HOST
+DISCOURSE_HOST
 
 TWITCH_CLIENT_ID
 TWITCH_CLIENT_SECRET
@@ -24,14 +31,15 @@ TWITCH_CALLBACK_URI
 STRIPE_PUBLISHABLE_KEY
 STRIPE_SECRET_KEY
 
-STRIMPACK_SERVER_HOST
-STRIMPACK_SERVER_PORT
+STRIMPACK_PORT
 STRIMPACK_SESSION_SECRET
 STRIMPACK_DB_USER
 STRIMPACK_DB_PASSWORD
 STRIMPACK_DB_NAME
 STRIMPACK_DB_HOST
 STRIMPACK_DB_PORT
+
+STRIMCHAT_PORT
 
 POSTGRESQL_PASSWORD
 
