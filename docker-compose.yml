@@ -33,6 +33,10 @@ services:
       - DISCOURSE_POSTGRESQL_USERNAME
       - DISCOURSE_POSTGRESQL_PASSWORD
       - REDIS_PASSWORD
+      - SMTP_HOST
+      - SMTP_PORT
+      - SMTP_USER
+      - SMTP_PASSWORD
   sidekiq:
     image: 'bitnami/discourse:latest'
     depends_on:
