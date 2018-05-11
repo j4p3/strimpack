@@ -23,8 +23,6 @@ services:
       - 'discourse_data:/bitnami'
     environment:
       - VIRTUAL_HOST=forum.*
-      - DISCOURSE_USERNAME
-      - DISCOURSE_PASSWORD
       - DISCOURSE_EMAIL
       - DISCOURSE_SITENAME
       - POSTGRESQL_HOST
@@ -60,7 +58,7 @@ services:
     volumes:
       - 'client_assets:/usr/src/strimpack-web-client/'
   site:
-    image: j4p3/strimpack
+    image: j4p3/strimpack-server
     depends_on:
       - 'postgresql'
       - 'web_client'

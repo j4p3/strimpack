@@ -120,4 +120,8 @@ DISCOURSE_PORT
 
 Shoot me a message. This was a bit of a learning project, I'm happy to help you get something up and running. You can find me at [bonner.jp](https://bonner.jp).
 
+### contributing
+
+There are a million and one things to do here. Contributions are welcome.
+
 *MIT license.*
