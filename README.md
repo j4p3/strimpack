@@ -8,7 +8,7 @@
 
 This is the central orchestration repo for the project. The applications that are doing the actual work:
 
-* [strimpack](https://github.com/j4p3/strimpack) webserver producing main website, handling authentication, payments, and client application prerendering
+* [strimpack-server](https://github.com/j4p3/strimpack-server) webserver producing main website, handling authentication, payments, and client application prerendering
 *  [strimchat](https://github.com/j4p3/strimchat) chatserver for client application
 *  [strimpack web client](https://github.com/j4p3/strimpack-web-client) react app for main site
 
